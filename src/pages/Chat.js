@@ -1,45 +1,54 @@
-import React, { useState, useEffect } from "react";
-import io from "socket.io-client";
-import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import axios from "axios";
-import Swal from "sweetalert2";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllUser, getUserDetailId, updatePhoto, updateUser } from '../redux/actions/users';
 
-import styles from "../assets/styles/Chat.module.css";
-import burger from "../assets/images/burger.svg";
-import gear from "../assets/images/setting.svg";
-import call from "../assets/images/call.svg";
-import contact from "../assets/images/contact.svg";
-import faq from "../assets/images/faq.svg";
-import invite from "../assets/images/invite.svg";
-import save from "../assets/images/save.svg";
-import search from "../assets/images/search.svg";
-import plus from "../assets/images/plus.svg";
-import profileMenu from "../assets/images/menuProfile.svg";
-import emot from "../assets/images/emot.svg";
-import postimage from "../assets/images/postimage.svg";
-import backIcon from "../assets/images/back.svg";
-import editIcon from "../assets/images/edit.photo.profile.svg";
-import profileEx from "../assets/images/profileEX.png";
+import styles from '../assets/styles/Chat.module.css';
+import burger from '../assets/images/burger.svg';
+import gear from '../assets/images/setting.svg';
+import call from '../assets/images/call.svg';
+import contact from '../assets/images/contact.svg';
+import faq from '../assets/images/faq.svg';
+import invite from '../assets/images/invite.svg';
+import save from '../assets/images/save.svg';
+import search from '../assets/images/search.svg';
+import plus from '../assets/images/plus.svg';
+import profileMenu from '../assets/images/menuProfile.svg';
+import emot from '../assets/images/emot.svg';
+import postimage from '../assets/images/postimage.svg';
+import backIcon from '../assets/images/back.svg';
+import editIcon from '../assets/images/edit.photo.profile.svg';
 
 export default function Chat() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const [listUser, setListUser] = useState([]);
-  const [login, setLogin] = useState({});
-  const [message, setMessage] = useState("");
+
+  const detailUser = useSelector((state) => state.detailUser.data);
+  const allUser = useSelector((state) => state.getAlluser.data);
+  // console.log(detailUser.email);
+
+  const token = localStorage.getItem('token');
+  const [message, setMessage] = useState('');
   const [listchat, setListChat] = useState([]);
   const [socketio, setSocketio] = useState(null);
+  const [form, setForm] = useState({
+    username: detailUser.username,
+    email: detailUser.email,
+    phone: detailUser.phone,
+    fullname: detailUser.fullname,
+    bio: detailUser.bio
+  });
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_BACKEND_URL);
-    socket.on("send-message-response", (response) => {
-      const receiver = localStorage.getItem("receiver");
-      // console.log(response[0]);
-      if (
-        receiver === response[0].sender_id ||
-        receiver === response[0].receiver_id
-      ) {
+    socket.on('send-message-response', (response) => {
+      const receiver = localStorage.getItem('receiver');
+      if (receiver === response[0].sender_id || receiver === response[0].receiver_id) {
         setListChat(response);
       }
     });
@@ -53,50 +62,27 @@ export default function Chat() {
     setRightDisplay(true);
     setListChat([]);
     setActiveReceiver(item);
-    localStorage.setItem("receiver", item.id);
-    socketio.emit("join-room", login);
+    localStorage.setItem('receiver', item.id);
+    socketio.emit('join-room', detailUser);
     const data = {
-      sender: login.id,
-      receiver: item.id,
+      sender: detailUser.id,
+      receiver: item.id
     };
-    socketio.emit("chat-history", data);
+    socketio.emit('chat-history', data);
   };
 
+  const user = jwtDecode(token);
   useEffect(() => {
-    const user = jwtDecode(token);
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/users`, {
-        headers: {
-          token: token,
-        },
-      })
-      .then((response) => {
-        setListUser(response.data.data);
-        // console.log(response.data.data[0].id);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(getAllUser());
 
-    // ----user login----
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/users/${user.id}`, {
-        headers: {
-          token: token,
-        },
-      })
-      .then((response) => {
-        setLogin(response.data.data);
-        // console.log(response.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // ----user detailUser----
+    dispatch(getUserDetailId(user.id));
   }, []);
 
   // -------------------send message------------------
   const onSubmitMessage = (e) => {
     e.preventDefault();
+    setProfileUser(false);
     const user = jwtDecode(token);
     // const receiver = localStorage.getItem("receiver");
     const payload = {
@@ -104,63 +90,49 @@ export default function Chat() {
       receiver: activeReceiver.fullname,
       message,
       receiver_id: activeReceiver.id,
-      sender_id: user.id,
+      sender_id: user.id
     };
     setListChat([...listchat, payload]);
     const data = {
       sender: user.id,
       receiver: activeReceiver.id,
-      message,
+      message
     };
-    socketio.emit("send-message", data);
-    setMessage("");
+    socketio.emit('send-message', data);
+    setMessage('');
   };
 
   // ---------------------search-------------------
   const [querySearch, setQuerySearch] = useState({
-    value: "",
+    value: ''
   });
   const onSearch = (e) => {
     e.preventDefault();
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_URL}/users?search=${querySearch.value}`,
-        {
-          headers: {
-            token: token,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        setListUser(response.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    dispatch(getAllUser(querySearch.value));
   };
 
   const onLogout = (e) => {
     e.preventDefault();
     Swal.fire({
-      title: "Are you sure?",
-      text: "Logout",
-      icon: "warning",
+      title: 'Are you sure?',
+      text: 'Logout',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes Logout",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes Logout'
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();
         navigate(`/`);
-        Swal.fire("Logout", "success");
+        Swal.fire('Logout', 'success');
       }
     });
   };
 
   const [loading, setLoading] = useState(false);
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState('');
   const [buttonVisibility, setButtonVisibility] = useState(false);
   const photoSubmit = (e) => {
     e.preventDefault();
@@ -168,39 +140,26 @@ export default function Chat() {
     if (loading == false) {
       setLoading(true);
       const formData = new FormData();
-      formData.append("image", photo);
-      axios
-        .put(
-          `${process.env.REACT_APP_BACKEND_URL}/users/update/photo`,
-          formData,
-          {
-            headers: {
-              token: token,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then((res) => {
+      formData.append('image', photo);
+      updatePhoto(formData)
+        .then(() => {
           Swal.fire({
-            title: "Success!",
-            text: "Success Update photo",
-            icon: "success",
+            title: 'Success!',
+            text: 'Success Update photo',
+            icon: 'success'
           }).then(() => {
             setButtonVisibility(!buttonVisibility);
-            window.location.href = `/chat`;
+            dispatch(getUserDetailId(user.id));
           });
         })
         .catch((err) => {
           Swal.fire({
-            title: "Error!",
+            title: 'Error!',
             text: err.response.data.error,
-            icon: "error",
+            icon: 'error'
           }).then(() => {
             setButtonVisibility(!buttonVisibility);
           });
-        })
-        .finally(() => {
-          setLoading(false);
         });
     }
   };
@@ -209,11 +168,75 @@ export default function Chat() {
   const onSetting = (e) => {
     e.preventDefault();
     setSetting(true);
+    dispatch(getUserDetailId(user.id));
   };
 
   const onBack = (e) => {
     e.preventDefault();
     setSetting(false);
+  };
+
+  const onEdit = (e) => {
+    e.preventDefault();
+    setLoading(false);
+    if (loading == false) {
+      if (form.username === '') {
+        Swal.fire({
+          title: 'Error!',
+          text: `Username Can't be empty`,
+          icon: 'error'
+        });
+      } else if (form.fullname === '') {
+        Swal.fire({
+          title: 'Error!',
+          text: `Name Can't be empty`,
+          icon: 'error'
+        });
+      } else if (form.bio === '') {
+        Swal.fire({
+          title: 'Error!',
+          text: `Biodata Can't be empty`,
+          icon: 'error'
+        });
+      } else if (form.phone === '') {
+        Swal.fire({
+          title: 'Error!',
+          text: `phone Can't be empty`,
+          icon: 'error'
+        });
+      } else {
+        setLoading(true);
+        updateUser(form)
+          .then((res) => {
+            Swal.fire({
+              title: 'Success!',
+              text: res.message,
+              icon: 'success'
+            }).then(() => {
+              dispatch(getUserDetailId(user.id));
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: 'Error!',
+              text: err.response.data.message,
+              icon: 'error'
+            });
+          });
+      }
+    }
+  };
+
+  const [profileUser, setProfileUser] = useState(false);
+  const onProfile = (e) => {
+    e.preventDefault();
+    setProfileUser(true);
+    // dispatch(getUserDetailId(user.id));
+  };
+
+  const onBackProfile = (e) => {
+    e.preventDefault();
+    setProfileUser(false);
   };
 
   return (
@@ -234,14 +257,9 @@ export default function Chat() {
                     <div>
                       <img
                         onClick={() =>
-                          document.getElementById("clickBurger").style
-                            .display === "none"
-                            ? (document.getElementById(
-                                "clickBurger"
-                              ).style.display = "")
-                            : (document.getElementById(
-                                "clickBurger"
-                              ).style.display = "none")
+                          document.getElementById('clickBurger').style.display === 'none'
+                            ? (document.getElementById('clickBurger').style.display = '')
+                            : (document.getElementById('clickBurger').style.display = 'none')
                         }
                         className={styles.imgBurger}
                         src={burger}
@@ -250,29 +268,20 @@ export default function Chat() {
                     </div>
                   </div>
                   <div
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                     id="clickBurger"
-                    className={`col-8 ${styles.clickBurger}`}
-                  >
+                    className={`col-8 ${styles.clickBurger}`}>
                     <div className={` ${styles.iconTitle}`}>
                       <div
                         className={`col-4`}
                         style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <img
-                          className={styles.iconImage}
-                          src={gear}
-                          alt="gear"
-                        />
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center'
+                        }}>
+                        <img className={styles.iconImage} src={gear} alt="gear" />
                       </div>
-                      <div
-                        onClick={(e) => onSetting(e)}
-                        style={{ cursor: "pointer" }}
-                      >
+                      <div onClick={(e) => onSetting(e)} style={{ cursor: 'pointer' }}>
                         Settings
                       </div>
                     </div>
@@ -280,85 +289,61 @@ export default function Chat() {
                       <div
                         className={`col-4`}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <img
-                          className={styles.iconImage}
-                          src={contact}
-                          alt="contact"
-                        />
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                        <img className={styles.iconImage} src={contact} alt="contact" />
                       </div>
-                      <div style={{ cursor: "pointer" }}>Contact</div>
+                      <div style={{ cursor: 'pointer' }}>Contact</div>
                     </div>
                     <div className={` ${styles.iconTitle}`}>
                       <div
                         className={`col-4`}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <img
-                          className={styles.iconImage}
-                          src={call}
-                          alt="call"
-                        />
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                        <img className={styles.iconImage} src={call} alt="call" />
                       </div>
-                      <div style={{ cursor: "pointer" }}>Calls</div>
+                      <div style={{ cursor: 'pointer' }}>Calls</div>
                     </div>
                     <div className={` ${styles.iconTitle}`}>
                       <div
                         className={`col-4`}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <img
-                          className={styles.iconImage}
-                          src={save}
-                          alt="save"
-                        />
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                        <img className={styles.iconImage} src={save} alt="save" />
                       </div>
-                      <div style={{ cursor: "pointer" }}>Save messages</div>
+                      <div style={{ cursor: 'pointer' }}>Save messages</div>
                     </div>
                     <div className={` ${styles.iconTitle}`}>
                       <div
                         className={`col-4`}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <img
-                          className={styles.iconImage}
-                          src={invite}
-                          alt="invite"
-                        />
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                        <img className={styles.iconImage} src={invite} alt="invite" />
                       </div>
-                      <div style={{ cursor: "pointer" }}>Invite friends</div>
+                      <div style={{ cursor: 'pointer' }}>Invite friends</div>
                     </div>
                     <div className={` ${styles.iconTitle}`}>
                       <div
                         className={`col-4`}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
                         <img className={styles.iconImage} src={faq} alt="faq" />
                       </div>
-                      <div
-                        onClick={(e) => onLogout(e)}
-                        style={{ cursor: "pointer" }}
-                      >
+                      <div onClick={(e) => onLogout(e)} style={{ cursor: 'pointer' }}>
                         Logout
                       </div>
                     </div>
@@ -367,22 +352,15 @@ export default function Chat() {
 
                 {/* -------2---------- */}
                 <div className={`row ${styles.content2}`}>
-                  <form
-                    onSubmit={(e) => onSearch(e)}
-                    className={`col-9 ${styles.divSearch}`}
-                  >
+                  <form onSubmit={(e) => onSearch(e)} className={`col-9 ${styles.divSearch}`}>
                     <div className="col-1">
-                      <img
-                        className={styles.imgBurger}
-                        src={search}
-                        alt="search"
-                      />
+                      <img className={styles.imgBurger} src={search} alt="search" />
                     </div>
                     <input
                       onChange={(e) =>
                         setQuerySearch({
                           ...querySearch,
-                          value: e.target.value,
+                          value: e.target.value
                         })
                       }
                       placeholder=" Type your message"
@@ -409,26 +387,28 @@ export default function Chat() {
                 </div>
 
                 {/* -------4---------- */}
-                {listUser.map((item, index) =>
-                  item.id !== login.id ? (
+                {allUser.map((item, index) =>
+                  item.id !== detailUser.id ? (
                     <div
                       onClick={() => selectReceiver(item)}
                       key={index}
                       className={`row ${styles.content4}`}
-                      style={{ cursor: "pointer" }}
-                    >
+                      style={{ cursor: 'pointer' }}>
                       <div className={`col-2 ${styles.divImage}`}>
                         <img
                           className={styles.imageProfile}
-                          src={`${process.env.REACT_APP_BACKEND_URL}/users/${item.photo}`}
+                          src={`${process.env.REACT_APP_BACKEND_URL}users/${item.photo}`}
                           alt="profile"
+                          onError={(e) => {
+                            e.target.src = `${process.env.REACT_APP_BACKEND_URL}users/profile-default.png`;
+                          }}
                         />
                       </div>
                       <div className={`col-7  ${styles}`}>
                         <div>
                           <h6>{item.fullname}</h6>
                         </div>
-                        <div style={{ color: "#7E98DF" }}>massage</div>
+                        <div style={{ color: '#7E98DF' }}>massage</div>
                       </div>
                       <div className={`col-2  ${styles}`}>
                         <div>12.00</div>
@@ -463,11 +443,14 @@ export default function Chat() {
 
                   {/* -------2---------- */}
                   <div className={styles.divPhotoprofile}>
-                    <div style={{ marginBottom: "5px" }}>
+                    <div style={{ marginBottom: '5px' }}>
                       <img
                         className={styles.imageEditProfile}
-                        src={`${process.env.REACT_APP_BACKEND_URL}/users/${login.photo}`}
+                        src={`${process.env.REACT_APP_BACKEND_URL}users/${detailUser.photo}`}
                         alt="profile"
+                        onError={(e) => {
+                          e.target.src = `${process.env.REACT_APP_BACKEND_URL}users/profile-default.png`;
+                        }}
                       />
                     </div>
                     <div className={styles.divEditImage}>
@@ -475,37 +458,32 @@ export default function Chat() {
                         <input
                           type="file"
                           id="photo"
-                          style={{ display: "none" }}
+                          style={{ display: 'none' }}
                           onChange={(e) => {
                             setPhoto(e.target.files[0]);
                             setButtonVisibility(!buttonVisibility);
                           }}
                         />
-                        <input
-                          type="submit"
-                          id="submit"
-                          style={{ display: "none" }}
-                        />
+                        <input type="submit" id="submit" style={{ display: 'none' }} />
                       </form>
                       {buttonVisibility ? (
                         <>
                           <button
                             type="button"
                             onClick={() => {
-                              document.getElementById("submit").click();
+                              document.getElementById('submit').click();
                             }}
                             style={{
-                              width: "auto",
-                              height: "30px",
-                              backgroundColor: "#FFFFFF",
-                              border: "2px solid #9ea0a5",
-                              color: "#9ea0a5",
-                              borderRadius: "10px",
-                              fontSize: "15px",
-                              marginBottom: "0px",
-                            }}
-                          >
-                            {loading ? "Loading.." : "Upload"}
+                              width: 'auto',
+                              height: '30px',
+                              backgroundColor: '#FFFFFF',
+                              border: '2px solid #9ea0a5',
+                              color: '#9ea0a5',
+                              borderRadius: '10px',
+                              fontSize: '15px',
+                              marginBottom: '0px'
+                            }}>
+                            {loading ? 'Loading..' : 'Upload'}
                           </button>
                         </>
                       ) : (
@@ -513,23 +491,79 @@ export default function Chat() {
                           <button
                             className={styles.divButonEdit}
                             onClick={() => {
-                              document.getElementById("photo").click();
-                            }}
-                          >
+                              document.getElementById('photo').click();
+                            }}>
                             <div className={styles}>
-                              <img
-                                style={{ width: "20px", marginRight: "5px" }}
-                                src={editIcon}
-                              />
+                              <img style={{ width: '20px', marginRight: '5px' }} src={editIcon} />
                             </div>
                             <div className={styles.titleEdit}>Edit</div>
                           </button>
                         </>
                       )}
                     </div>
-                    <div style={{ marginTop: "20px" }}>
-                      <h5>{login.fullname}</h5>
-                    </div>
+                  </div>
+                  <div>
+                    <h5 className={styles.divLabel}>Account</h5>
+                    <form onSubmit={(e) => onEdit(e)}>
+                      <div className={styles.divLabel}>
+                        <label>Name</label>
+                        <div>
+                          <input
+                            onChange={(e) => setForm({ ...form, fullname: e.target.value })}
+                            defaultValue={form.fullname}
+                            className={styles.inputProfile}
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.divLabel}>
+                        <label>Username</label>
+                        <div>
+                          <input
+                            onChange={(e) => setForm({ ...form, username: e.target.value })}
+                            defaultValue={form.username}
+                            className={styles.inputProfile}
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.email}>
+                        <label>Email</label>
+                        <div>
+                          <input
+                            defaultValue={form.email}
+                            className={styles.inputProfile}
+                            disabled
+                            type="email"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.divLabel}>
+                        <label>Phone</label>
+                        <div>
+                          <input
+                            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                            value={form.phone}
+                            className={styles.inputProfile}
+                            type="number"
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.divLabel}>
+                        <label>Biodata</label>
+                        <div>
+                          <textarea
+                            onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                            defaultValue={form.bio}
+                            className={styles.inputBio}></textarea>
+                        </div>
+                      </div>
+                      <div className={styles.divButonProfile}>
+                        <button type="submit" className={styles.buttonProfile}>
+                          <h6>Save</h6>
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -546,18 +580,20 @@ export default function Chat() {
                     <div className={`col-6 ${styles.rightContact}`}>
                       <img
                         className={styles.imageProfile}
-                        src={`${process.env.REACT_APP_BACKEND_URL}/users/${activeReceiver.photo}`}
+                        src={`${process.env.REACT_APP_BACKEND_URL}users/${activeReceiver.photo}`}
                         alt="profile"
+                        onError={(e) => {
+                          e.target.src = `${process.env.REACT_APP_BACKEND_URL}users/profile-default.png`;
+                        }}
                       />
                       <div className={styles.fullname}>
                         <h6>{activeReceiver.fullname}</h6>
-                        <div style={{ color: "#7e98df", fontSize: "large" }}>
-                          on
-                        </div>
+                        <div style={{ color: '#7e98df', fontSize: 'large' }}>online</div>
                       </div>
                     </div>
                     <div className={`col-5 ${styles.leftContact}`}>
                       <img
+                        onClick={(e) => onProfile(e)}
                         className={styles.prifileMenu}
                         src={profileMenu}
                         alt="profileMenu"
@@ -566,18 +602,76 @@ export default function Chat() {
                   </div>
                 </div>
 
+                {/* ------------------------------------------------------- */}
+                {profileUser ? (
+                  <div className={`row ${styles.settingContentRigh}`}>
+                    <div className="col-1"></div>
+                    <div className="col-11">
+                      <div className={`row ${styles.content1}`}>
+                        <div className={`col-3 ${styles.titleTelegram}`}>
+                          <img
+                            onClick={(e) => onBackProfile(e)}
+                            className={styles.imgBurger}
+                            src={backIcon}
+                            alt="backIcon"
+                          />
+                        </div>
+                        <div className={`col-8 ${styles}`}>
+                          <div>
+                            <h4>Profile</h4>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={styles.divPhotoprofile}>
+                        <div style={{ marginBottom: '5px' }}>
+                          <img
+                            className={styles.imageEditProfile}
+                            src={`${process.env.REACT_APP_BACKEND_URL}users/${activeReceiver.photo}`}
+                            alt="profile"
+                            onError={(e) => {
+                              e.target.src = `${process.env.REACT_APP_BACKEND_URL}users/profile-default.png`;
+                            }}
+                          />
+                        </div>
+
+                        <div style={{ marginTop: '20px', marginBottom: '30px' }}>
+                          <h5>{activeReceiver.fullname}</h5>
+                        </div>
+                      </div>
+                      <div style={{ marginTop: '20px', marginBottom: '30px' }}>
+                        <h6>Phone Number</h6>
+                        <div>{activeReceiver.phone}</div>
+                      </div>
+                      <div style={{ marginTop: '20px', marginBottom: '30px' }}>
+                        <h6>Email</h6>
+                        <div>{activeReceiver.email}</div>
+                      </div>
+                      <div style={{ marginTop: '20px', marginBottom: '30px' }}>
+                        <h6>Username</h6>
+                        <div>{activeReceiver.username}</div>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {/* --------------------------------------------------------- */}
+
                 {/* ------------2. chat ---------- */}
                 <div className={`row ${styles.secondContent}`}>
                   {listchat.map((item, index) => (
                     <div key={index}>
-                      {item.sender_id === login.id ? (
+                      {item.sender_id === detailUser.id ? (
                         <div className={`${styles.leftChat}`}>
                           <div className={styles.myChat}>{item.message}</div>
                           <div>
                             <img
                               className={styles.imgChat}
-                              src={`${process.env.REACT_APP_BACKEND_URL}/users/${item.sender_photo}`}
+                              src={`${process.env.REACT_APP_BACKEND_URL}users/${detailUser.photo}`}
                               alt="profileEx"
+                              onError={(e) => {
+                                e.target.src = `${process.env.REACT_APP_BACKEND_URL}users/profile-default.png`;
+                              }}
                             />
                           </div>
                         </div>
@@ -586,8 +680,11 @@ export default function Chat() {
                           <div>
                             <img
                               className={styles.imgChat}
-                              src={`${process.env.REACT_APP_BACKEND_URL}/users/${activeReceiver.photo}`}
+                              src={`${process.env.REACT_APP_BACKEND_URL}users/${activeReceiver.photo}`}
                               alt="profile"
+                              onError={(e) => {
+                                e.target.src = `${process.env.REACT_APP_BACKEND_URL}users/profile-default.png`;
+                              }}
                             />
                           </div>
                           <div className={styles.chat}>{item.message}</div>
@@ -603,34 +700,35 @@ export default function Chat() {
                     <div className={`col-10 ${styles.divInputMsg}`}>
                       <form onSubmit={onSubmitMessage}>
                         <input
+                          onClick={(e) => {
+                            setProfileUser(false);
+                            setSetting(false);
+                          }}
                           onChange={(e) => setMessage(e.target.value)}
                           value={message}
                           className={`col-12 ${styles.inputMessage}`}
                           placeholder=" Type your message..."
                           type="text"
+                          required
                         />
                       </form>
                     </div>
                     <div>
                       <img
-                        style={{ marginRight: "15px", cursor: "pointer" }}
+                        style={{ marginRight: '15px', cursor: 'pointer' }}
                         src={plus}
                         alt="plus"
                       />
                     </div>
                     <div>
                       <img
-                        style={{ marginRight: "15px", cursor: "pointer" }}
+                        style={{ marginRight: '15px', cursor: 'pointer' }}
                         src={emot}
                         alt="emot"
                       />
                     </div>
                     <div>
-                      <img
-                        style={{ cursor: "pointer" }}
-                        src={postimage}
-                        alt="postimage"
-                      />
+                      <img style={{ cursor: 'pointer' }} src={postimage} alt="postimage" />
                     </div>
                   </div>
                 </div>
@@ -638,14 +736,13 @@ export default function Chat() {
             ) : (
               <div
                 style={{
-                  color: "#848484",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100vh",
-                  fontSize: "larger",
-                }}
-              >
+                  color: '#848484',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100vh',
+                  fontSize: 'larger'
+                }}>
                 <div>Please select a chat to start messaging</div>
               </div>
             )}

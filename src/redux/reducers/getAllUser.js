@@ -4,21 +4,21 @@ const initialState = {
   isError: false
 };
 
-const getUserDetailId = (state = initialState, action) => {
+const getAllUser = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_USER_DETAIL_ID_PENDING':
+    case 'GET_ALL_USER_PENDING':
       return { ...state, isLoading: true };
-    case 'GET_USER_DETAIL_ID_FULFILLED':
+    case 'GET_ALL_USER_FULFILLED':
       return {
         ...state,
         isLoading: false,
         data: action.payload.data.data
       };
-    case 'GET_USER_DETAIL_ID_REJECTED':
+    case 'GET_ALL_USER_REJECTED':
       return { ...state, isLoading: false, isError: true };
     default:
       return state;
   }
 };
 
-export default getUserDetailId;
+export default getAllUser;

@@ -76,10 +76,10 @@
   border: none;
   background-color: transparent;
 }
-.input[type="text"] {
+.input[type='text'] {
   padding-left: 20px;
 }
-.input[type="text"]:focus {
+.input[type='text']:focus {
   outline: none;
 }
 .plus {
@@ -128,7 +128,7 @@
   padding: 40px 0px;
   background-color: white;
   position: absolute;
-  border-right: 1px solid #e5e5e5;
+  /* border-right: 1px solid #e5e5e5; */
 }
 /* --------2-------- */
 .divPhotoprofile {
@@ -153,12 +153,74 @@
   color: #9ea0a5;
   font-weight: 400;
 }
+.divLabel {
+  margin-bottom: 10px;
+}
+.inputProfile {
+  border: none;
+  width: 98%;
+  height: 30px;
+  border-radius: 10px;
+  background-color: #e5e5e5;
+  outline: none;
+}
+.inputProfile[type='email'] {
+  padding-left: 10px;
+}
+.inputProfile[type='text'] {
+  padding-left: 10px;
+}
+.inputProfile[type='number'] {
+  padding-left: 10px;
+}
+.inputBio {
+  border: none;
+  width: 98%;
+  height: 55px;
+  border-radius: 10px;
+  background-color: #e5e5e5;
+  outline: none;
+  resize: none;
+}
+.divButonProfile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: -30px;
+}
+.buttonProfile {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: 30%;
+  height: 40px;
+  background-color: #e5e5e5;
+  color: #0d0d0e;
+  border-radius: 15px;
+}
 
 /* ----------------------right---------------- */
 .rightContent {
   background-color: #e5e5e5;
   /* padding: 40px 30px; */
 }
+
+/* //////////////////////////////////////////// */
+.settingContentRigh {
+  height: 100vh;
+  width: 26%;
+  top: 0;
+  right: 15px;
+  padding: 40px 0px;
+  background-color: white;
+  position: absolute;
+  /* display: none; */
+  border-left: 1px solid #e5e5e5;
+}
+
+/* ///////////////////////////////////////////// */
 
 /* ------------1. info contact ------------ */
 .infoContact {
@@ -263,7 +325,7 @@
   background-color: transparent;
   border: none;
 }
-.inputMessage[type="text"]:focus {
+.inputMessage[type='text']:focus {
   outline: none;
 }
 

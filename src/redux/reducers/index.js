@@ -1,8 +1,11 @@
-// import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-// const rootReducer = combineReducers({
+import detailUser from './userDetailId';
+import getAlluser from './getAllUser';
 
-// });
+const rootReducer = combineReducers({
+  detailUser,
+  getAlluser
+});
 
-// export default rootReducer;
-// //
+export default rootReducer;
