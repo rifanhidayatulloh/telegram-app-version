@@ -123,6 +123,6 @@ REACT_APP_BACKEND_URL = [API_URL]
 
 My Email : rifanhidayatulloh96@gmail.com
 
-Project Link: [https://github.com/altrawan/telegram-app](https://github.com/rifanhidayatulloh/telegram-app-version)
+Project Link: [https://github.com/rifanhidayatulloh/telegram-app-version](https://github.com/rifanhidayatulloh/telegram-app-version)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
