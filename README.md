@@ -36,10 +36,8 @@
       </ul>
     </li>
     <li><a href="#screenshoots">Screenshots</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#related-project">Related Project</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#license">License</a></li>
   </ol>
 </details>
 
