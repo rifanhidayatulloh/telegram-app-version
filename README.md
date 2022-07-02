@@ -1,70 +1,130 @@
-# Getting Started with Create React App
+<div id="top"></div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
 
-## Available Scripts
+  <h3 align="center">Telegram Chatting</h3>
 
-In the project directory, you can run:
+  <p align="center">
+    Send your Message to the World🌎.
+    <br />
+    <a href="#table-of-contents"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://telegram-web-app-eight.vercel.app/">View Demo</a>
+  </p>
+</div>
 
-### `npm start`
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#setup-env-example">Setup .env example</a></li>
+      </ul>
+    </li>
+    <li><a href="#screenshoots">Screenshots</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#related-project">Related Project</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<!-- ABOUT THE PROJECT -->
+## About The Project
+**Telegram Chatting** is a web site-based two-way real-time chat communication application.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Built With
+This app was built with some technologies below:
+* [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS?retiredLocale=id)
+* [Javascript](https://www.javascript.com/)
+* [React](https://reactjs.org)
+* [Axios](https://axios-http.com/)
+* [Socket.io](https://socket.io/)
+* [React Redux](https://react-redux.js.org/introduction/getting-started)
 
-### `npm test`
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<!-- GETTING STARTED -->
+## Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Before going to the installation stage there are some software that must be installed first.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* [NodeJs](https://nodejs.org/en/download/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+If you want to run this project locally, I recommend you to configure the [back-end](https://github.com/rifanhidayatulloh/telegram-api) first before configuring this repo front-end.
+- Clone the repo
+```
+git clone https://github.com/rifanhidayatulloh/telegram-app-version.git
+```
+- Go To Folder Repo
+```
+cd telegram-frontend
+```
+- Install Module
+```
+npm install
+```
+- <a href="#setup-env">Setup .env</a>
+- Type ` npm run dev` To Start Website
+- Type ` npm run start` To Start Production
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Setup .env example
+Create .env file in your root project folder.
+```
+REACT_APP_BACKEND_URL = [API_URL]
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-## Learn More
+## Screenshoots
+<p align="center" display=flex>
+   
+<table>
+ 
+  
+</table>
+      
+</p>
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Related Project
+:star: [`Backend Telegram Chatting`](https://github.com/rifanhidayatulloh/telegram-api)
 
-### Code Splitting
+:star: [`Frontend Telegram Chatting`](https://github.com/rifanhidayatulloh/telegram-app-version)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+:star: [`Web Service`](https://telegram-rest-api.herokuapp.com/)
 
-### Analyzing the Bundle Size
+:star: [`Demo Telegram Chatting`](https://telegram-web-app-eight.vercel.app/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-### Making a Progressive Web App
+## Contact
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+My Email : rifanhidayatulloh96@gmail.com
 
-### Advanced Configuration
+Project Link: [https://github.com/altrawan/telegram-app](https://github.com/rifanhidayatulloh/telegram-app-version)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<p align="right">(<a href="#top">back to top</a>)</p>
