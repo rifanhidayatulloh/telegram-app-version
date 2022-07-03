@@ -7,7 +7,7 @@
   <h3 align="center">Telegram Chatting</h3>
 
   <p align="center">
-    Send your Message to the World🌎.
+    Send your Message to the World.
     <br />
     <a href="#table-of-contents"><strong>Explore the docs »</strong></a>
     <br />
@@ -101,6 +101,39 @@ REACT_APP_BACKEND_URL = [API_URL]
    
 <table>
  
+  <tr>
+    <td>Login Page</td>
+    <td>Register Page</td>
+  </tr>
+  <tr>
+    <td><image src="https://i.postimg.cc/tCbTfW2g/React-App-5.png" alt="Login Page" width=100%></td>
+    <td><image src="https://i.postimg.cc/kgX5M9r3/React-App-6.png" alt="Register Page" width=100%/></td>
+  </tr>
+  
+  <tr>
+    <td>Landing Page</td>
+    <td>Landing Page</td>
+  </tr>
+  <tr>
+    <td><image src="https://i.postimg.cc/QMhJdF8N/React-App.png" alt="Landing Page" width=100%></td>
+    <td><image src="https://i.postimg.cc/wTDfVyBH/React-App-2.png" alt="Landing Page" width=100%/></td>
+  </tr>
+  
+  <tr>
+    <td>Edit Profile Page</td>
+    <td>Chat Page</td>
+  </tr>
+  <tr>
+    <td><image src="https://i.postimg.cc/ZnS3KRzF/React-App-1.png" alt="Edit Profile Page" width=100%></td>
+    <td><image src="https://i.postimg.cc/tTyCsV7T/React-App-3.png" alt="Chat Page" width=100%/></td>
+  </tr>
+  
+  <tr>
+    <td>Detail Profile Page</td>
+  </tr>
+  <tr>
+    <td><image src="https://i.postimg.cc/Bbz0B8Z2/React-App-4.png" alt="Detail Profile Page" width=100%></td>
+  </tr>
   
 </table>
       
