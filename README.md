@@ -115,8 +115,8 @@ REACT_APP_BACKEND_URL = [API_URL]
     <td>Landing Page</td>
   </tr>
   <tr>
-    <td><image src="https://i.postimg.cc/QMhJdF8N/React-App.png" alt="Landing Page" width=100%></td>
-    <td><image src="https://i.postimg.cc/wTDfVyBH/React-App-2.png" alt="Landing Page" width=100%/></td>
+    <td><image src="https://i.postimg.cc/K4hmmGS3/React-App-10.png" alt="Landing Page" width=100%></td>
+    <td><image src="https://i.postimg.cc/t45nvfWN/React-App-11.png" alt="Landing Page" width=100%/></td>
   </tr>
   
   <tr>
@@ -124,15 +124,15 @@ REACT_APP_BACKEND_URL = [API_URL]
     <td>Chat Page</td>
   </tr>
   <tr>
-    <td><image src="https://i.postimg.cc/ZnS3KRzF/React-App-1.png" alt="Edit Profile Page" width=100%></td>
-    <td><image src="https://i.postimg.cc/tTyCsV7T/React-App-3.png" alt="Chat Page" width=100%/></td>
+    <td><image src="https://i.postimg.cc/TwTm3xxS/React-App-8.png" alt="Edit Profile Page" width=100%></td>
+    <td><image src="https://i.postimg.cc/ncXmz08H/React-App-7.png" alt="Chat Page" width=100%/></td>
   </tr>
   
   <tr>
     <td>Detail Profile Page</td>
   </tr>
   <tr>
-    <td><image src="https://i.postimg.cc/Bbz0B8Z2/React-App-4.png" alt="Detail Profile Page" width=100%></td>
+    <td><image src="https://i.postimg.cc/fLWthvjQ/React-App-9.png" alt="Detail Profile Page" width=100%></td>
   </tr>
   
 </table>
